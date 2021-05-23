@@ -5,8 +5,26 @@
 </template>
 
 <script>
+  
+
   export default {
-    name: 'CustomMap'
+    name: 'CustomMap',
+    data: function() {
+      return {
+        apiKey: '',
+        config: {},
+        googlemap: null,
+        map: null
+      };
+    },
+    methods: {
+      initMap() {
+
+      }
+    },
+    async mounted() {
+
+    }
   }
 </script>
 
