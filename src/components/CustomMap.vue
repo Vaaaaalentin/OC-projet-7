@@ -1,58 +1,45 @@
 <template>
-  <div id="map" ref="map">
-    
-  </div>
+    <GMapLoader @mapInitialized="addUserMarker">
+      <template v-slot:default="{ google, map }">
+        <MapMarker 
+        v-for="marker in markers" 
+        :key="marker.id" 
+        :position="marker.position" 
+        :google="google" 
+        :map="map" />
+      </template>
+    </GMapLoader>
+
 </template>
 
 <script>
-  import { Loader } from "@googlemaps/js-api-loader"
+  import MapMarker from './MapMarker.vue'
+  import GMapLoader from './GMapLoader.vue'
 
   export default {
     name: 'CustomMap',
+    components: {
+      MapMarker,
+      GMapLoader
+    },
     data: function() {
       return {
-        apiKey: 'AIzaSyASVP7Y6sAiVPML4W4v2mAkcSjcQBdHQt0',
-        mapConfig: {
-          zoom: 14,
-          disableDefaultUI: true
-        },
-        google: null,
-        map: null
+        markers: []
       };
     },
     methods: {
-      initMap() {
-        const mapContainer = this.$refs.map;
-        this.map = new this.google.maps.Map(mapContainer, this.mapConfig);
-      },
-      setToUserPosition() {
-        navigator.geolocation.getCurrentPosition((position) => {
-          this.map.setCenter({
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          });
+      addUserMarker(position) {
+        this.markers.push({
+          position: position,
+          id: 'User'
         });
       }
     },
-    async mounted() {
-      const loader = new Loader({
-        apiKey: this.apiKey
-      });
-
-      const api = await loader.load().then(function(){
-        return window.google;
-      });
-
-      this.google = api;
-      this.initMap();
-      this.setToUserPosition();
+    mounted() {
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  #map{
-    width: 100%;
-  }
 </style>
