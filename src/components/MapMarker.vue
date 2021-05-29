@@ -5,7 +5,8 @@
       google: Object,
       map: Object,
       position: Object,
-      id: String
+      key: String,
+      name: String
     },
     data: function() {
       return {
@@ -18,7 +19,8 @@
       this.marker = new this.google.maps.Marker({
         map: this.map,
         position: this.position,
-        title: this.id
+        title: this.name,
+        label: this.name
       });
     }
   }

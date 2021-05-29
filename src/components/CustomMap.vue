@@ -4,6 +4,7 @@
         <MapMarker 
         v-for="marker in markers" 
         :key="marker.id" 
+        :name="marker.name"
         :position="marker.position" 
         :google="google" 
         :map="map" />
@@ -31,7 +32,8 @@
       addUserMarker(position) {
         this.markers.push({
           position: position,
-          id: 'User'
+          id: 'user',
+          name: 'Utilisateur'
         });
       }
     },

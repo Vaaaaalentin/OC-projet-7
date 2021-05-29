@@ -11,16 +11,13 @@
 
 <script>
   import { Loader } from '@googlemaps/js-api-loader'
+  import { mapSettings } from '@/constants/mapConfig'
 
   export default {
     name: 'GMapLoader',
     data: function() {
       return {
         apiKey: 'AIzaSyASVP7Y6sAiVPML4W4v2mAkcSjcQBdHQt0',
-        mapConfig: {
-          zoom: 14,
-          disableDefaultUI: true
-        },
         google: null,
         map: null,
         loader: false
@@ -29,7 +26,7 @@
     methods: {
       initMap() {
         const mapContainer = this.$refs.map;
-        this.map = new this.google.maps.Map(mapContainer, this.mapConfig);
+        this.map = new this.google.maps.Map(mapContainer, mapSettings);
       },
       setToUserPosition() {
         navigator.geolocation.getCurrentPosition((position) => {
