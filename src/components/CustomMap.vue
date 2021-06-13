@@ -38,6 +38,17 @@
       }
     },
     mounted() {
+      const restaurants = this.$store.state.restaurants;
+
+      for(let i=0; i<restaurants.length; i++)
+        this.markers.push({
+          position: {
+            lat: restaurants[i].lat,
+            lng: restaurants[i].long
+          },
+          id: i, 
+          name: restaurants[i].restaurantName
+        });
     }
   }
 </script>
