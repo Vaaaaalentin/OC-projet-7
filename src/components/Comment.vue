@@ -1,7 +1,10 @@
 <template>
   <li>
-    <span>{{ text }}</span>
-    <span>{{ ratings }}</span>
+    <span class="rating">
+      <BIconStarFill v-for="n in rating" :key="n"/>
+      <BIconStar v-for="n in oppositeRating" :key="n"/>
+    </span> <br/>
+    <span class="comment">{{ text }}</span>
   </li>
 </template>
 
@@ -11,6 +14,11 @@
     props: {
       text: String,
       rating: Number
+    },
+    computed: {
+      oppositeRating() {
+        return 5 - this.rating;
+      }
     }
   }
 </script>

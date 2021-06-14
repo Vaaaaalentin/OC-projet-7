@@ -1,8 +1,12 @@
 <template>
   <div id="restaurants-list">
     <div class="ctrls">
-      <button class="btn" v-on:click="sortRestaurantsByNote('asc')">Asc</button>
-      <button class="btn" v-on:click="sortRestaurantsByNote('desc')">Desc</button>
+      <button class="btn" :class="[order == 'asc' ? 'selected' : '']" v-on:click="sortRestaurantsByNote('asc')">
+        <BIconSortNumericDown />
+      </button>
+      <button class="btn" :class="[order == 'desc' ? 'selected' : '']" v-on:click="sortRestaurantsByNote('desc')">
+        <BIconSortNumericUpAlt />
+      </button>
     </div>
     <ul>
       <RestaurantItem 
@@ -26,7 +30,7 @@
     },
     data: function(){
       return {
-        order: 'asc'
+        order: null
       }
     },
     methods: {
@@ -53,6 +57,7 @@
         }(_this));
 
         this.replaceRestaurantsList(restaurants);
+        this.order = direction;
       },
       ...mapActions(['replaceRestaurantsList'])
     },
@@ -77,6 +82,13 @@
   #restaurants-list .ctrls .btn{
     width: 50%;
     border-radius: 0;
+  }
+  #restaurants-list .ctrls .btn.selected{
+    border: none;
+  }
+  #restaurants-list .ctrls .btn svg{
+    width: 1.5em;
+    height: 1.5em;
   }
 
   #restaurants-list > ul{

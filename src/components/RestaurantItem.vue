@@ -4,13 +4,11 @@
     <span class="address">{{ address }}</span>
     <div class="rating">
       <div class="rating-average">
-        <span class="fas fa-star"></span>
-        <span class="fas fa-star"></span>
-        <span class="fas fa-star"></span>
-        <span class="fas fa-star-half-alt"></span>
-        <span class="far fa-star"></span>
+        <BIconStarFill v-for="n in Math.floor(ratingAverage)" :key="n"/>
+        <BIconStarHalf v-if="ratingHasDecimal" />
+        <BIconStar v-for="n in Math.floor(oppositeRatingAverage)" :key="n"/>
+        <span class="nb-ratings"> ({{ ratings.length }})</span>
       </div>
-      <span class="nb-ratings">{{ ratingAverage }} ({{ ratings.length }})</span>
     </div>
   </li>
 </template>
@@ -27,7 +25,6 @@
     },
     methods: {
       showDetails: function() {
-        console.log('coucou');
         this.setInfosModal({
           name: this.name,
           address: this.address,
@@ -45,6 +42,12 @@
           total += this.ratings[i].stars;
 
         return (total/this.ratings.length);
+      },
+      oppositeRatingAverage() {
+        return 5 - this.ratingAverage;
+      },
+      ratingHasDecimal() {
+        return (this.ratingAverage.toString().indexOf('.') != -1) ? true : false;
       }
     }
   }
