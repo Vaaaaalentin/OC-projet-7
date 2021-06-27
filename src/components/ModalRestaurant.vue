@@ -9,6 +9,8 @@
           <div class="infos">
             <span class="name">{{ restaurantModal.name }}</span> <br/>
             <span class="address">{{ restaurantModal.address }}</span>
+            <GStreetViewImage
+            :address="restaurantModal.address"/>
           </div>
           <div class="comments">
             <ul>
@@ -27,12 +29,14 @@
 
 <script>
   import Comment from './Comment.vue'
+  import GStreetViewImage from './GStreetViewImage.vue'
   import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'ModalRestaurant',
     components: {
-      Comment
+      Comment,
+      GStreetViewImage
     },
     data: function(){
       return {

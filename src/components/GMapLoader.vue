@@ -12,6 +12,7 @@
 <script>
   import { Loader } from '@googlemaps/js-api-loader'
   import { mapSettings } from '@/constants/mapConfig'
+  import { mapState } from 'vuex'
 
   export default {
     name: 'GMapLoader',
@@ -39,6 +40,9 @@
           this.$emit('mapInitialized', coords);
         });
       }
+    },
+    computed: {
+      ...mapState(['googleApiKey'])
     },
     async mounted() {
       const loader = new Loader({

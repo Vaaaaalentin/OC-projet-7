@@ -1,16 +1,28 @@
 <template>
   <div id="restaurants-list">
     <div class="ctrls">
-      <button class="btn" :class="[order == 'asc' ? 'selected' : '']" v-on:click="sortRestaurantsByNote('asc')">
-        <BIconSortNumericDown />
-      </button>
-      <button class="btn" :class="[order == 'desc' ? 'selected' : '']" v-on:click="sortRestaurantsByNote('desc')">
-        <BIconSortNumericUpAlt />
-      </button>
+      <div class="order">
+        <button class="btn" :class="[order == 'asc' ? 'selected' : '']" v-on:click="sortRestaurantsByNote('asc')">
+          <BIconSortNumericDown />
+        </button>
+        <button class="btn" :class="[order == 'desc' ? 'selected' : '']" v-on:click="sortRestaurantsByNote('desc')">
+          <BIconSortNumericUpAlt />
+        </button>
+      </div>
+      <div class="sort">
+        <span>De</span>
+        <select name="min" v-on:change="minSort($event)">
+          <option v-for="i in sortRange" :value="i" :key="i" :selected="(i==sortMin) ? true : false">{{ i }}</option>
+        </select>
+        <span>à</span>
+        <select name="max" v-on:change="maxSort($event)">
+          <option v-for="i in sortRange" :value="i" :key="i" :selected="(i==sortMax) ? true : false">{{ i }}</option>
+        </select>
+      </div>
     </div>
     <ul>
       <RestaurantItem 
-      v-for="restaurant in restaurants" 
+      v-for="restaurant in restaurantsShown"
       :key="restaurant.restaurantName"
       :name="restaurant.restaurantName"
       :address="restaurant.address" 
@@ -30,7 +42,10 @@
     },
     data: function(){
       return {
-        order: null
+        order: null,
+        sortMin: 1,
+        sortMax: 5,
+        sortRange: [1, 2, 3, 4, 5]
       }
     },
     methods: {
@@ -56,13 +71,48 @@
             }
         }(_this));
 
-        this.replaceRestaurantsList(restaurants);
+        this.replaceRestaurantsShownList(restaurants);
         this.order = direction;
       },
-      ...mapActions(['replaceRestaurantsList'])
+      minSort(e) {
+        this.sortMin = Number(e.target.value);
+
+        if(this.sortMin > this.sortMax)
+          this.sortMax = this.sortMin;
+
+        this.sort();
+      },
+      maxSort(e) {
+        this.sortMax = Number(e.target.value);
+
+        if(this.sortMax < this.sortMin)
+          this.sortMin = this.sortMax;
+
+        this.sort();
+      },
+      sort() {
+        let tempRestaurants = this.restaurants.slice();
+
+        console.log(tempRestaurants);
+
+        let toShow = [];
+
+        for(let i=0; i<tempRestaurants.length; i++)
+        {
+          const item = tempRestaurants[i];
+
+          console.log(item.averageRating);
+
+          if(item.averageRating >= this.sortMin && item.averageRating <= this.sortMax)
+              toShow.push(item);
+        }
+
+        this.replaceRestaurantsShownList(toShow);
+      },
+      ...mapActions(['replaceRestaurantsList', 'replaceRestaurantsShownList'])
     },
     computed: {
-      ...mapState(['restaurants'])
+      ...mapState(['restaurants', 'restaurantsShown'])
     }
   }
 </script>
@@ -76,19 +126,29 @@
     z-index: 2;
   }
 
-  #restaurants-list .ctrls{
+  #restaurants-list .ctrls,
+  #restaurants-list .ctrls .order
+  #restaurants-list .ctrls .sort{
     display: flex;
   }
-  #restaurants-list .ctrls .btn{
+  #restaurants-list .ctrls .order,
+  #restaurants-list .ctrls .sort{
+    width: 50%;
+  }
+  #restaurants-list .ctrls .order .btn{
     width: 50%;
     border-radius: 0;
   }
-  #restaurants-list .ctrls .btn.selected{
+  #restaurants-list .ctrls .order .btn.selected{
     border: none;
   }
-  #restaurants-list .ctrls .btn svg{
+  #restaurants-list .ctrls .order .btn svg{
     width: 1.5em;
     height: 1.5em;
+  }
+
+  #restaurants-list .ctrls .sort select{
+    height: 100%;
   }
 
   #restaurants-list > ul{
