@@ -7,7 +7,7 @@
         </div>
         <div class="modal-body">
           <div class="infos">
-            <span class="name">{{ restaurantModal.name }}</span> <br/>
+            <span class="name">{{ restaurantModal.restaurantName }}</span> <br/>
             <span class="address">{{ restaurantModal.address }}</span>
             <GStreetViewImage
             :address="restaurantModal.address"/>
@@ -20,6 +20,13 @@
               :text="comment.comment" 
               :rating="comment.stars"/>
             </ul>
+            <div class="new-comment">
+              <textarea v-model="commentText"></textarea>
+              <select v-model="commentRating">
+                <option v-for="n in 6" :key="n-1" :value="n-1">{{ n-1 }}</option>
+              </select>
+              <button class="btn" v-on:click="addNewComment">OK</button>
+            </div>
           </div>
         </div>
       </div>
@@ -38,14 +45,30 @@
       Comment,
       GStreetViewImage
     },
-    data: function(){
+    data: function() {
       return {
-        
-      }
+        commentRating: 5,
+        commentText: undefined
+      };
     },
     methods: {
       closeModal() {
         this.toggleModal(false);
+      },
+      addNewComment() {
+        if(this.commentRating == undefined || this.commentText == undefined)
+          return;
+
+        this.restaurantModal.ratings.push({
+          stars: this.commentRating,
+          comment: this.commentText
+        });
+
+        this.resetInputs();
+      },
+      resetInputs() {
+        this.commentRating = 5;
+        this.commentText = undefined;
       },
       ...mapActions(['toggleModal'])
     },
@@ -75,7 +98,7 @@
     margin: 200px auto;
     width: 750px;
     min-height: 400px;
-    background-color: #EAEAEA;
+    background-color: #FAFAFA;
     padding: 15px 25px;
   }
 
@@ -103,6 +126,33 @@
     padding: 10px;
   }
   .modal-body .comments > ul li:last-child{
-    border-bottom: none;
+    /*border-bottom: none;*/
+  }
+
+  .modal-body .new-comment{
+    display: flex;
+    padding: 15px;
+  }
+
+  .modal-body .new-comment > textarea,
+  .modal-body .new-comment > select,
+  .modal-body .new-comment > .btn{
+    /*border: solid 1px #909090;*/
+  }
+
+  .modal-body .new-comment > textarea{
+    resize: none;
+    width: 100%;
+    margin: 0;
+  }
+  .modal-body .new-comment > select{
+
+  }
+  .modal-body .new-comment > .btn{
+    width: 75px;
+  }
+
+  .modal-body .infos{
+    padding-right: 15px;
   }
 </style>

@@ -23,7 +23,8 @@
     <ul>
       <RestaurantItem 
       v-for="restaurant in restaurantsShown"
-      :key="restaurant.restaurantName"
+      :key="restaurant.id"
+      :id="restaurant.id"
       :name="restaurant.restaurantName"
       :address="restaurant.address" 
       :ratings="restaurant.ratings" />

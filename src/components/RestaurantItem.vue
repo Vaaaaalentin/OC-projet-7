@@ -19,20 +19,20 @@
   export default {
     name: 'RestaurantItem',
     props: {
+      id: Number,
       name: String,
       address: String,
       ratings: Array
     },
     methods: {
       showDetails: function() {
-        this.setInfosModal({
-          name: this.name,
-          address: this.address,
-          ratings: this.ratings
-        });
+        this.setInfosModal(this.id);
         this.toggleModal(true);
       },
       ...mapActions(['toggleModal', 'setInfosModal'])
+    },
+    mounted() {
+      console.log(this.id);
     },
     computed: {
       ratingAverage: function() {

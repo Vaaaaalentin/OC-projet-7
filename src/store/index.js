@@ -14,12 +14,11 @@ export default createStore({
     nextRestaurantId(state) {
       return state.restaurants[state.restaurants.length-1].id+1;
     },
-    getRestaurantFromId(state, id) {
-      const restaurants = state.restaurants;
-
-      for(let i=0; i<restaurants.length; i++)
-        if(restaurants[i].id == id)
-          return restaurants[i];
+    getRestaurantFromId(state) {
+      return (id) => {
+        console.log(id);
+        return state.restaurants.find(restaurant => restaurant.id == id);
+      }
     },
     getRestaurantIndexFromId(state, id) {
       const restaurants = state.restaurants;
@@ -133,7 +132,9 @@ export default createStore({
       else
         context.commit('HIDE_MODAL');
     },
-    setInfosModal(context, restaurant) {
+    setInfosModal(context, restaurantId) {
+      const restaurant = this.getters.getRestaurantFromId(restaurantId);
+
       context.commit('SET_INFOS_MODAL', restaurant);
     },
     initRestaurantsShownList(context) {
