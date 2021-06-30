@@ -31,10 +31,10 @@
         //   "ratings":[]
         // });
       },
-      ...mapActions(['addRestaurant', 'initRestaurantsShownList'])
+      ...mapActions(['addRestaurant', 'initRestaurantsList'])
     },
     mounted() {
-      this.initRestaurantsShownList();
+      this.initRestaurantsList();
     },
     computed: {
       ...mapState(['showModal'])
