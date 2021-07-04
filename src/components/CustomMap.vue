@@ -14,6 +14,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   import MapMarker from './MapMarker.vue'
   import GMapLoader from './GMapLoader.vue'
 
@@ -37,17 +39,18 @@
         });
       }
     },
+    computed: mapState({
+      restaurants: state => state.restaurantsList.restaurants
+    }),
     mounted() {
-      const restaurants = this.$store.state.restaurants;
-
-      for(let i=0; i<restaurants.length; i++)
+      for(let i=0; i<this.restaurants.length; i++)
         this.markers.push({
           position: {
-            lat: restaurants[i].lat,
-            lng: restaurants[i].long
+            lat: this.restaurants[i].lat,
+            lng: this.restaurants[i].long
           },
           id: i, 
-          name: restaurants[i].restaurantName
+          name: this.restaurants[i].restaurantName
         });
     }
   }

@@ -31,13 +31,15 @@
         //   "ratings":[]
         // });
       },
-      ...mapActions(['addRestaurant', 'initRestaurantsList'])
+      ...mapActions('restaurantsList', ['addRestaurant', 'initRestaurantsList'])
     },
     mounted() {
       this.initRestaurantsList();
     },
     computed: {
-      ...mapState(['showModal'])
+      ...mapState({
+        showModal: state => state.modal.showModal
+      })
     }
   }
 </script>

@@ -22,7 +22,7 @@
     </div>
     <ul>
       <RestaurantItem 
-      v-for="restaurant in restaurantsShown"
+      v-for="restaurant in sortedRestaurants"
       :key="restaurant.id"
       :id="restaurant.id"
       :name="restaurant.restaurantName"
@@ -50,29 +50,14 @@
       }
     },
     methods: {
-      restaurantRatingsAverage(restaurant) {
-        let total = 0;
-        const ratings = restaurant.ratings;
-
-        ratings.forEach(function(item){
-          total += item.stars
-        });
-
-        return total/ratings.length;
-      },
       sortRestaurantsByNote(direction) {
         const restaurants = this.$store.state.restaurants;
         const dir = (direction == 'asc') ? 1 : -1;
 
-        const _this = this;
+        restaurants.sort((restaurantA, restaurantB) => {
+          return (restaurantA.averageRating*dir) - (restaurantB.averageRating*dir);
+        });
 
-        restaurants.sort(function(context){
-            return function(restaurantA, restaurantB) {
-              return (context.restaurantRatingsAverage(restaurantA)*dir) - (context.restaurantRatingsAverage(restaurantB)*dir);
-            }
-        }(_this));
-
-        this.replaceRestaurantsShownList(restaurants);
         this.order = direction;
       },
       minSort(e) {
@@ -80,40 +65,22 @@
 
         if(this.sortMin > this.sortMax)
           this.sortMax = this.sortMin;
-
-        this.sort();
       },
       maxSort(e) {
         this.sortMax = Number(e.target.value);
 
         if(this.sortMax < this.sortMin)
           this.sortMin = this.sortMax;
-
-        this.sort();
       },
-      sort() {
-        let tempRestaurants = this.restaurants.slice();
-
-        console.log(tempRestaurants);
-
-        let toShow = [];
-
-        for(let i=0; i<tempRestaurants.length; i++)
-        {
-          const item = tempRestaurants[i];
-
-          console.log(item.averageRating);
-
-          if(item.averageRating >= this.sortMin && item.averageRating <= this.sortMax)
-              toShow.push(item);
-        }
-
-        this.replaceRestaurantsShownList(toShow);
-      },
-      ...mapActions(['replaceRestaurantsList', 'replaceRestaurantsShownList'])
+      ...mapActions('restaurantsList', ['replaceRestaurantsList'])
     },
     computed: {
-      ...mapState(['restaurants', 'restaurantsShown'])
+      sortedRestaurants: function() {
+        return this.restaurants.filter(restaurant => restaurant.averageRating >= this.sortMin && restaurant.averageRating <= this.sortMax);
+      },
+      ...mapState({
+        restaurants: state => state.restaurantsList.restaurants
+      })
     }
   }
 </script>

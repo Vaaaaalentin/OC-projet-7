@@ -29,10 +29,7 @@
         this.setInfosModal(this.id);
         this.toggleModal(true);
       },
-      ...mapActions(['toggleModal', 'setInfosModal'])
-    },
-    mounted() {
-      console.log(this.id);
+      ...mapActions('modal', ['toggleModal', 'setInfosModal'])
     },
     computed: {
       ratingAverage: function() {

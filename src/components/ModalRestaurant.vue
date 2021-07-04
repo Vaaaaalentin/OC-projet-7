@@ -70,10 +70,12 @@
         this.commentRating = 5;
         this.commentText = undefined;
       },
-      ...mapActions(['toggleModal'])
+      ...mapActions('modal', ['toggleModal'])
     },
     computed: {
-      ...mapState(['restaurantModal'])
+      ...mapState({
+        restaurantModal: state => state.modal.restaurantModal
+      })
     }
   }
 </script>
