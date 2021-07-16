@@ -28,25 +28,29 @@
       :name="restaurant.restaurantName"
       :address="restaurant.address" 
       :ratings="restaurant.ratings" />
+
     </ul>
+      <RestaurantItemNew v-if="isAddingNew"/>
   </div>
 </template>
 
 <script>
-  import { mapState, mapActions } from 'vuex'
+  import { mapState } from 'vuex'
   import RestaurantItem from './RestaurantItem.vue'
+  import RestaurantItemNew from './RestaurantItemNew.vue'
 
   export default {
     name: 'RestaurantsList',
     components: {
-      RestaurantItem
+      RestaurantItem,
+      RestaurantItemNew
     },
     data: function(){
       return {
         order: null,
-        sortMin: 1,
+        sortMin: 0,
         sortMax: 5,
-        sortRange: [1, 2, 3, 4, 5]
+        sortRange: [0, 1, 2, 3, 4, 5]
       }
     },
     methods: {
@@ -71,15 +75,15 @@
 
         if(this.sortMax < this.sortMin)
           this.sortMin = this.sortMax;
-      },
-      ...mapActions('restaurantsList', ['replaceRestaurantsList'])
+      }
     },
     computed: {
       sortedRestaurants: function() {
         return this.restaurants.filter(restaurant => restaurant.averageRating >= this.sortMin && restaurant.averageRating <= this.sortMax);
       },
       ...mapState({
-        restaurants: state => state.restaurantsList.restaurants
+        restaurants: state => state.restaurantsList.restaurants,
+        isAddingNew: state => state.restaurantsList.isAddingNew
       })
     }
   }
@@ -92,8 +96,14 @@
     background-color: #EAEAEA;
     box-shadow: 1px 10px 10px #2d2d2d;
     z-index: 2;
+    max-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 
+  #restaurants-list .ctrls{
+    border-bottom: solid 1px #404040;
+  }
   #restaurants-list .ctrls,
   #restaurants-list .ctrls .order
   #restaurants-list .ctrls .sort{
@@ -123,6 +133,10 @@
     list-style: none;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
+    
+    scrollbar-width: thin;
+    scrollbar-color: #2c3e50 #efefef;
   }
 
   #restaurants-list > ul li{

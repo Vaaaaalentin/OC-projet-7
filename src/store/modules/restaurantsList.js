@@ -3,14 +3,27 @@ import { RESTAURANTS_LIST } from '@/constants/restaurantsList.js'
 const restaurantsList = {
   namespaced: true,
   state: () => ({
-    restaurants: []
+    restaurants: [],
+    isAddingNew: false
   }),
   getters: {
-    
+    getNextRestaurantId(state) {
+      let id = 1;
+
+      state.restaurants.forEach(function(restaurant){
+        if(restaurant.id >= id)
+          id = id+1;
+      });
+
+      return id;
+    }
   },
   mutations: {
     SETUP_RESTAURANTS_LIST(state) {
       state.restaurants = RESTAURANTS_LIST.slice();
+    },
+    TOGGLE_NEW_RESTAURANT(state, setting) {
+      state.isAddingNew = setting;
     },
     ADD_RESTAURANT(state, restaurant) {
       state.restaurants.push(restaurant);
@@ -26,6 +39,9 @@ const restaurantsList = {
     }
   },
   actions: {
+    toggleNewRestaurant(context, setting) {
+      context.commit('TOGGLE_NEW_RESTAURANT', setting);
+    },
     addRestaurant(context, restaurant) {
       context.commit('ADD_RESTAURANT', restaurant);
     },
@@ -44,7 +60,7 @@ const restaurantsList = {
       context.commit('SET_AVERAGE_RATING_RESTAURANTS', id, average);
     },
     updateAllRestaurantsAverage(context){
-      for(let i=0; i<this.state.restaurants.length; i++)
+      for(let i=0; i<this.state.restaurantsList.restaurants.length; i++)
       {
         context.dispatch('updateRestaurantAverage', this.state.restaurants[i].id);
       }

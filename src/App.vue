@@ -1,7 +1,6 @@
 <template>
   <div id="main-holder">
-    <RestaurantsList 
-    v-on:click="addNewRestaurant" />
+    <RestaurantsList />
     <CustomMap />
     <ModalRestaurant v-if="showModal"/>
   </div>
@@ -22,16 +21,7 @@
       ModalRestaurant
     },
     methods: {
-      addNewRestaurant() {
-        // this.addRestaurant({
-        //   "restaurantName":"Test",
-        //   "address":"rue test",
-        //   "lat":48.8737614,
-        //   "long":2.3501699,
-        //   "ratings":[]
-        // });
-      },
-      ...mapActions('restaurantsList', ['addRestaurant', 'initRestaurantsList'])
+      ...mapActions('restaurantsList', ['initRestaurantsList'])
     },
     mounted() {
       this.initRestaurantsList();

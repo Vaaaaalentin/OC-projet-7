@@ -1,16 +1,15 @@
 <template>
-    <GMapLoader @mapInitialized="addUserMarker">
-      <template v-slot:default="{ google, map }">
-        <MapMarker 
-        v-for="marker in markers" 
-        :key="marker.id" 
-        :name="marker.name"
-        :position="marker.position" 
-        :google="google" 
-        :map="map" />
-      </template>
-    </GMapLoader>
-
+  <GMapLoader @mapInitialized="addInitMarkers" @newMarker="addMarker">
+    <template v-slot:default="{ google, map }">
+      <MapMarker 
+      v-for="marker in markers" 
+      :key="marker.id" 
+      :name="marker.name"
+      :position="marker.position" 
+      :google="google" 
+      :map="map" />
+    </template>
+  </GMapLoader>
 </template>
 
 <script>
@@ -31,27 +30,34 @@
       };
     },
     methods: {
+      addInitMarkers(userPosition) {
+        this.addUserMarker(userPosition);
+
+        for(let i=0; i<this.restaurants.length; i++)
+          this.addMarker(this.restaurants[i]);
+      },
       addUserMarker(position) {
         this.markers.push({
           position: position,
           id: 'user',
           name: 'Utilisateur'
         });
-      }
-    },
-    computed: mapState({
-      restaurants: state => state.restaurantsList.restaurants
-    }),
-    mounted() {
-      for(let i=0; i<this.restaurants.length; i++)
+      },
+      addMarker(restaurant) {
         this.markers.push({
           position: {
-            lat: this.restaurants[i].lat,
-            lng: this.restaurants[i].long
+            lat: restaurant.lat,
+            lng: restaurant.long
           },
-          id: i, 
-          name: this.restaurants[i].restaurantName
+          id: restaurant.id, 
+          name: restaurant.restaurantName
         });
+      }
+    },
+    computed: {
+      ...mapState({
+        restaurants: state => state.restaurantsList.restaurants
+      })
     }
   }
 </script>

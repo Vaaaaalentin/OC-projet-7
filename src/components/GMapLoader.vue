@@ -1,18 +1,18 @@
 <template>
-    <div id="map" ref="map">
-    </div>
-    <template v-if="Boolean(google) && Boolean(map)">
-      <slot
-        :google="google"
-        :map="map"
-      />
-    </template>
+  <div id="map" ref="map">
+  </div>
+  <template v-if="Boolean(google) && Boolean(map)">
+    <slot
+      :google="google"
+      :map="map"
+    />
+  </template>
 </template>
 
 <script>
   import { Loader } from '@googlemaps/js-api-loader'
   import { mapSettings } from '@/constants/mapConfig'
-  import { mapState } from 'vuex'
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'GMapLoader',
@@ -20,6 +20,7 @@
       return {
         apiKey: 'AIzaSyASVP7Y6sAiVPML4W4v2mAkcSjcQBdHQt0',
         google: null,
+        geocoder: null,
         map: null,
         loader: false
       };
@@ -39,11 +40,31 @@
           this.map.setCenter(coords);
           this.$emit('mapInitialized', coords);
         });
-      }
+      },
+      addRestaurantOnMap(e) {
+        console.log(e.latLng.lat());
+        console.log(e.latLng.lng());
+
+        this.toggleNewRestaurant(true);
+
+        console.log(this.google);
+        console.log(this.google.maps);
+        console.log(this.google.maps.Geocoder);
+        console.log(this.geocoder);
+
+        this.geocoder.geocode({
+          location: {
+            lat: e.latLng.lat(),
+            lng: e.latLng.lng()
+          }
+        }, function(results, status){
+          console.log(results);
+          console.log(status);
+        });
+      },
+      ...mapActions('restaurantsList', ['addRestaurant', 'toggleNewRestaurant'])
     },
-    computed: {
-      ...mapState(['googleApiKey'])
-    },
+    computed: {},
     async mounted() {
       const loader = new Loader({
         apiKey: this.apiKey
@@ -54,9 +75,13 @@
       });
 
       this.google = api;
+      this.geocoder = new this.google.maps.Geocoder();
       this.loaded = true;
       this.initMap();
       this.setToUserPosition();
+
+
+      this.map.addListener("click", this.addRestaurantOnMap);
     }
   }
 </script>

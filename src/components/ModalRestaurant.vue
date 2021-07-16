@@ -21,7 +21,7 @@
               :rating="comment.stars"/>
             </ul>
             <div class="new-comment">
-              <textarea v-model="commentText"></textarea>
+              <textarea v-model="commentText" placeholder="Votre commentaire..."></textarea>
               <select v-model="commentRating">
                 <option v-for="n in 6" :key="n-1" :value="n-1">{{ n-1 }}</option>
               </select>
