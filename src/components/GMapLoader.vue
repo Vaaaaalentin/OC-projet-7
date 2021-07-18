@@ -18,7 +18,7 @@
     name: 'GMapLoader',
     data: function() {
       return {
-        apiKey: 'AIzaSyASVP7Y6sAiVPML4W4v2mAkcSjcQBdHQt0',
+        apiKey: 'AIzaSyB60Ffk7jJMPVEeAwu70s__cHmB5Dxr6C8',
         google: null,
         geocoder: null,
         map: null,
@@ -46,11 +46,6 @@
         console.log(e.latLng.lng());
 
         this.toggleNewRestaurant(true);
-
-        console.log(this.google);
-        console.log(this.google.maps);
-        console.log(this.google.maps.Geocoder);
-        console.log(this.geocoder);
 
         this.geocoder.geocode({
           location: {
