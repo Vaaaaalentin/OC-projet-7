@@ -20,7 +20,7 @@
         </select>
       </div>
     </div>
-    <ul>
+    <ul class="c-scrollbar">
       <RestaurantItem 
       v-for="restaurant in sortedRestaurants"
       :key="restaurant.id"
@@ -55,7 +55,7 @@
     },
     methods: {
       sortRestaurantsByNote(direction) {
-        const restaurants = this.$store.state.restaurants;
+        const restaurants = this.restaurants;
         const dir = (direction == 'asc') ? 1 : -1;
 
         restaurants.sort((restaurantA, restaurantB) => {
@@ -134,9 +134,6 @@
     margin: 0;
     padding: 0;
     overflow-y: scroll;
-    
-    scrollbar-width: thin;
-    scrollbar-color: #2c3e50 #efefef;
   }
 
   #restaurants-list > ul li{

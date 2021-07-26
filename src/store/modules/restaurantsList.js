@@ -4,7 +4,11 @@ const restaurantsList = {
   namespaced: true,
   state: () => ({
     restaurants: [],
-    isAddingNew: false
+    isAddingNew: false,
+    newRestaurantInfos: {
+      name: null,
+      address: null
+    }
   }),
   getters: {
     getNextRestaurantId(state) {
@@ -25,6 +29,13 @@ const restaurantsList = {
     TOGGLE_NEW_RESTAURANT(state, setting) {
       state.isAddingNew = setting;
     },
+    SET_ADDRESS_NEW_RESTAURANT(state, address) {
+      state.newRestaurantInfos.address = address;
+    },
+    RESET_NEW_RESTAURANT_INFOS(state) {
+      state.newRestaurantInfos.name = null;
+      state.newRestaurantInfos.address = null;
+    },
     ADD_RESTAURANT(state, restaurant) {
       state.restaurants.push(restaurant);
     },
@@ -41,6 +52,12 @@ const restaurantsList = {
   actions: {
     toggleNewRestaurant(context, setting) {
       context.commit('TOGGLE_NEW_RESTAURANT', setting);
+    },
+    setAddressNewRestaurantInfos(context, address) {
+      context.commit('SET_ADDRESS_NEW_RESTAURANT', address);
+    },
+    resetNewRestauranInfos(context) {
+      context.commit('RESET_NEW_RESTAURANT_INFOS');
     },
     addRestaurant(context, restaurant) {
       context.commit('ADD_RESTAURANT', restaurant);

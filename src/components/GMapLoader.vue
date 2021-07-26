@@ -12,13 +12,12 @@
 <script>
   import { Loader } from '@googlemaps/js-api-loader'
   import { mapSettings } from '@/constants/mapConfig'
-  import { mapActions } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'GMapLoader',
     data: function() {
       return {
-        apiKey: 'AIzaSyB60Ffk7jJMPVEeAwu70s__cHmB5Dxr6C8',
         google: null,
         geocoder: null,
         map: null,
@@ -45,7 +44,7 @@
         console.log(e.latLng.lat());
         console.log(e.latLng.lng());
 
-        this.toggleNewRestaurant(true);
+        let _this = this;
 
         this.geocoder.geocode({
           location: {
@@ -55,14 +54,19 @@
         }, function(results, status){
           console.log(results);
           console.log(status);
+
+          _this.setAddressNewRestaurantInfos(results[0].formatted_address);
+          _this.toggleNewRestaurant(true);
         });
       },
-      ...mapActions('restaurantsList', ['addRestaurant', 'toggleNewRestaurant'])
+      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setAddressNewRestaurantInfos'])
     },
-    computed: {},
+    computed: {
+      ...mapState(['googleApiKey'])
+    },
     async mounted() {
       const loader = new Loader({
-        apiKey: this.apiKey
+        apiKey: this.googleApiKey
       });
 
       const api = await loader.load().then(function(){

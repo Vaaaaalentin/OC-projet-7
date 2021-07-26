@@ -20,7 +20,7 @@
         map: this.map,
         position: this.position,
         title: this.name,
-        label: this.name
+        label: this.name,
       });
     }
   }

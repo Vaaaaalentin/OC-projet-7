@@ -1,5 +1,5 @@
 <template>
-  <div class="modal-holder">
+  <div class="modal-holder" ref="holder" v-on:click="closeModalFromBackground">
     <div class="modal">
       <div class="modal-content">
         <div class="modal-header">
@@ -7,22 +7,24 @@
         </div>
         <div class="modal-body">
           <div class="infos">
-            <span class="name">{{ restaurantModal.restaurantName }}</span> <br/>
-            <span class="address">{{ restaurantModal.address }}</span>
+            <p class="name">{{ restaurantModal.restaurantName }}</p>
+            <p class="address">{{ restaurantModal.address }}</p>
             <GStreetViewImage
             :address="restaurantModal.address"/>
           </div>
           <div class="comments">
-            <ul>
+            <ul class="c-scrollbar">
               <Comment 
               v-for="comment in restaurantModal.ratings"
               :key="comment.id"
               :text="comment.comment" 
               :rating="comment.stars"/>
+              <li class="no-comment" v-if="restaurantModal.ratings.length==0">Aucun commentaire posté</li>
             </ul>
             <div class="new-comment">
               <textarea v-model="commentText" placeholder="Votre commentaire..."></textarea>
               <select v-model="commentRating">
+                <option disabled value="">Note</option>
                 <option v-for="n in 6" :key="n-1" :value="n-1">{{ n-1 }}</option>
               </select>
               <button class="btn" v-on:click="addNewComment">OK</button>
@@ -47,16 +49,20 @@
     },
     data: function() {
       return {
-        commentRating: 5,
+        commentRating: '',
         commentText: undefined
       };
     },
     methods: {
+      closeModalFromBackground(e) {
+        if(e.target == this.$refs.holder)
+          this.closeModal();
+      },
       closeModal() {
         this.toggleModal(false);
       },
       addNewComment() {
-        if(this.commentRating == undefined || this.commentText == undefined)
+        if(this.commentRating == '' || this.commentText == undefined)
           return;
 
         this.restaurantModal.ratings.push({
@@ -67,7 +73,7 @@
         this.resetInputs();
       },
       resetInputs() {
-        this.commentRating = 5;
+        this.commentRating = '';
         this.commentText = undefined;
       },
       ...mapActions('modal', ['toggleModal'])
@@ -99,7 +105,7 @@
     box-shadow: 1px 5px 5px rgba(50, 50, 50, 0.4);
     margin: 200px auto;
     width: 750px;
-    min-height: 400px;
+    height: 400px;
     background-color: #FAFAFA;
     padding: 15px 25px;
   }
@@ -117,10 +123,20 @@
     display: flex;
   }
 
+  .modal-body .comments{
+    width: 435px;
+  }
+
   .modal-body .comments > ul{
     list-style: none;
     margin: 0;
     padding: 0;
+    overflow-y: scroll;
+    height: 297px;
+  }
+
+  .modal-body .comments > ul li.no-comment{
+    font-style: italic;
   }
 
   .modal-body .comments > ul li{
@@ -156,5 +172,9 @@
 
   .modal-body .infos{
     padding-right: 15px;
+    width: 315px;
+  }
+  .modal-body .infos > .name{
+    margin-top: 0;
   }
 </style>

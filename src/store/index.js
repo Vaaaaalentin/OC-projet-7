@@ -3,7 +3,9 @@ import { restaurantsList } from './modules/restaurantsList.js'
 import { modal } from './modules/modal.js'
 
 export default createStore({
-  state: {},
+  state: {
+    googleApiKey: 'AIzaSyB60Ffk7jJMPVEeAwu70s__cHmB5Dxr6C8',
+  },
   getters: {
     getRestaurantFromId(state) {
       return (id) => {

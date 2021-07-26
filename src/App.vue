@@ -50,4 +50,9 @@
     display: flex;
     height: 100vh;
   }
+
+  .c-scrollbar{
+    scrollbar-width: thin;
+    scrollbar-color: #2c3e50 #efefef;
+  }
 </style>
