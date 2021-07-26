@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapState, mapActions } from 'vuex'
 
   import MapMarker from './MapMarker.vue'
   import GMapLoader from './GMapLoader.vue'
@@ -26,7 +26,7 @@
     },
     data: function() {
       return {
-        markers: []
+        
       };
     },
     methods: {
@@ -34,29 +34,35 @@
         this.addUserMarker(userPosition);
 
         for(let i=0; i<this.restaurants.length; i++)
-          this.addMarker(this.restaurants[i]);
+          this.addRestaurantMarker(this.restaurants[i]);
       },
       addUserMarker(position) {
-        this.markers.push({
+        const user = {
           position: position,
           id: 'user',
           name: 'Utilisateur'
-        });
+        };
+
+        this.addMarker(user);
       },
-      addMarker(restaurant) {
-        this.markers.push({
+      addRestaurantMarker(restaurant) {
+        const restaurantInfos = {
           position: {
             lat: restaurant.lat,
             lng: restaurant.long
           },
           id: restaurant.id, 
           name: restaurant.restaurantName
-        });
-      }
+        };
+
+        this.addMarker(restaurantInfos);
+      },
+      ...mapActions('map', ['addMarker', 'removeMarker'])
     },
     computed: {
       ...mapState({
-        restaurants: state => state.restaurantsList.restaurants
+        restaurants: state => state.restaurantsList.restaurants,
+        markers: state => state.map.markers
       })
     }
   }

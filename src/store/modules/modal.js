@@ -28,6 +28,6 @@ const modal = {
       context.commit('SET_INFOS_MODAL', restaurant);
     }
   }
-}
+};
 
 export { modal };

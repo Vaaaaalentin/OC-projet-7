@@ -1,6 +1,7 @@
 import { createStore } from 'vuex'
 import { restaurantsList } from './modules/restaurantsList.js'
 import { modal } from './modules/modal.js'
+import { map } from './modules/map.js'
 
 export default createStore({
   state: {
@@ -21,6 +22,7 @@ export default createStore({
   },
   modules: {
     restaurantsList,
-    modal
+    modal,
+    map
   }
 })
