@@ -44,6 +44,11 @@
         console.log(e.latLng.lat());
         console.log(e.latLng.lng());
 
+        const coords = {
+          lat: e.latLng.lat(),
+          long: e.latLng.lng()
+        };
+
         let _this = this;
 
         this.geocoder.geocode({
@@ -55,11 +60,14 @@
           console.log(results);
           console.log(status);
 
-          _this.setAddressNewRestaurantInfos(results[0].formatted_address);
+          _this.setPositionNewRestaurantInfos({
+            address: results[0].formatted_address,
+            coords: coords
+          });
           _this.toggleNewRestaurant(true);
         });
       },
-      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setAddressNewRestaurantInfos'])
+      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setPositionNewRestaurantInfos'])
     },
     computed: {
       ...mapState(['googleApiKey'])

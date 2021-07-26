@@ -7,7 +7,8 @@ const restaurantsList = {
     isAddingNew: false,
     newRestaurantInfos: {
       name: null,
-      address: null
+      address: null,
+      coords: null
     }
   }),
   getters: {
@@ -29,8 +30,9 @@ const restaurantsList = {
     TOGGLE_NEW_RESTAURANT(state, setting) {
       state.isAddingNew = setting;
     },
-    SET_ADDRESS_NEW_RESTAURANT(state, address) {
-      state.newRestaurantInfos.address = address;
+    SET_POSITION_NEW_RESTAURANT(state, position) {
+      state.newRestaurantInfos.address = position.address;
+      state.newRestaurantInfos.coords = position.coords;
     },
     RESET_NEW_RESTAURANT_INFOS(state) {
       state.newRestaurantInfos.name = null;
@@ -53,8 +55,8 @@ const restaurantsList = {
     toggleNewRestaurant(context, setting) {
       context.commit('TOGGLE_NEW_RESTAURANT', setting);
     },
-    setAddressNewRestaurantInfos(context, address) {
-      context.commit('SET_ADDRESS_NEW_RESTAURANT', address);
+    setPositionNewRestaurantInfos(context, address) {
+      context.commit('SET_POSITION_NEW_RESTAURANT', address);
     },
     resetNewRestauranInfos(context) {
       context.commit('RESET_NEW_RESTAURANT_INFOS');

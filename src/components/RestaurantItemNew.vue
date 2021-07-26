@@ -26,14 +26,25 @@
         if(this.newRestaurantInfos.name == null)
           return;
 
-        this.addRestaurant({
-          "restaurantName": this.newRestaurantInfos.name,
-          "address":this.newRestaurantInfos.address,
-          "lat":48.8737614,
-          "long":2.3501699,
-          "id": this.getNextRestaurantId,
-          "averageRating": 0,
-          "ratings":[]
+        const restaurant = {
+          restaurantName: this.newRestaurantInfos.name,
+          address: this.newRestaurantInfos.address,
+          lat: this.newRestaurantInfos.coords.lat,
+          long: this.newRestaurantInfos.coords.long,
+          id: this.getNextRestaurantId,
+          averageRating: 0,
+          ratings: []
+        };
+
+        this.addRestaurant(restaurant);
+
+        this.addMarker({
+          position: {
+            lat: restaurant.lat,
+            lng: restaurant.long
+          },
+          id: restaurant.id, 
+          name: restaurant.restaurantName
         });
 
         this.toggleNewRestaurant(false);
@@ -43,7 +54,8 @@
         this.toggleNewRestaurant(false);
         this.resetNewRestauranInfos();
       },
-      ...mapActions('restaurantsList', ['addRestaurant', 'toggleNewRestaurant', 'resetNewRestauranInfos'])
+      ...mapActions('restaurantsList', ['addRestaurant', 'toggleNewRestaurant', 'resetNewRestauranInfos']),
+      ...mapActions('map', ['addMarker'])
     },
     computed: {
       nameError() {
