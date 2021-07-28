@@ -41,9 +41,6 @@
         });
       },
       addRestaurantOnMap(e) {
-        console.log(e.latLng.lat());
-        console.log(e.latLng.lng());
-
         const coords = {
           lat: e.latLng.lat(),
           long: e.latLng.lng()
