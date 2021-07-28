@@ -5,6 +5,7 @@
       v-for="marker in markers" 
       :key="marker.id" 
       :name="marker.name"
+      :id="marker.id"
       :position="marker.position" 
       :google="google" 
       :map="map" />

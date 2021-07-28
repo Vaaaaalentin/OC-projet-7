@@ -1,5 +1,5 @@
 <template>
-  <li v-on:click="showDetails">
+  <li :class="{ selected: isSelected }" v-on:click="showDetails">
     <span class="name">{{ name }}</span>
     <span class="address">{{ address }}</span>
     <div class="rating">
@@ -14,7 +14,7 @@
 </template>
 
 <script>
-  import { mapActions } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     name: 'RestaurantItem',
@@ -24,10 +24,17 @@
       address: String,
       ratings: Array
     },
+    data() {
+      return {
+
+      }
+    },
     methods: {
       showDetails: function() {
         this.setInfosModal(this.id);
         this.toggleModal(true);
+
+        this.isSelected = true;
       },
       ...mapActions('modal', ['toggleModal', 'setInfosModal'])
     },
@@ -45,12 +52,36 @@
       },
       ratingHasDecimal() {
         return (this.ratingAverage.toString().indexOf('.') != -1) ? true : false;
-      }
+      },
+      isSelected() {
+        if(this.restaurantModal !== null && this.id === this.restaurantModal.id)
+          return true;
+
+        return false;
+      },
+      ...mapState({
+        restaurantModal: (state) => state.modal.restaurantModal
+      })
     }
   }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-  
+  li{
+    padding: 10px 15px;
+    border-bottom: solid 1px #404040;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+  }
+
+  li .ratings{
+    display: flex;
+  }
+  li.selected{
+    background-color: #77b55a;
+    color: #fff;
+    text-shadow: 1px 1px #404040;
+  }
 </style>

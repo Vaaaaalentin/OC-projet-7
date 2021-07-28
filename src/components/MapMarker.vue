@@ -1,4 +1,6 @@
 <script>
+  import { mapActions } from 'vuex'
+
   export default {
     name: 'MapMarker',
     props: {
@@ -6,6 +8,7 @@
       map: Object,
       position: Object,
       key: String,
+      id: String,
       name: String
     },
     data: function() {
@@ -14,6 +17,7 @@
       }
     },
     methods: {
+      ...mapActions('modal', ['toggleModal', 'setInfosModal'])
     },
     mounted: function() {
       this.marker = new this.google.maps.Marker({
@@ -22,6 +26,14 @@
         title: this.name,
         label: this.name,
       });
+
+      if(this.id != 'user')
+      {
+        this.marker.addListener('click', () => {
+          this.setInfosModal(this.id);
+          this.toggleModal(true);
+        });
+      }
     }
   }
 </script>

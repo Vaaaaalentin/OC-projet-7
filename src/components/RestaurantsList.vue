@@ -135,16 +135,4 @@
     padding: 0;
     overflow-y: scroll;
   }
-
-  #restaurants-list > ul li{
-    padding: 10px 15px;
-    border-bottom: solid 1px #404040;
-    display: flex;
-    flex-direction: column;
-    background-color: #ffffff;
-  }
-
-  #restaurants-list > ul li .ratings{
-    display: flex;
-  }
 </style>

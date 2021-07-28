@@ -11,6 +11,7 @@ const modal = {
     },
     HIDE_MODAL(state) {
       state.showModal = false;
+      state.restaurantModal = null;
     },
     SET_INFOS_MODAL(state, restaurant) {
       state.restaurantModal = restaurant;
