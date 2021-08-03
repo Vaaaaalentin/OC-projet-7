@@ -6,20 +6,32 @@
       :google="google"
       :map="map"
     />
+
+    <GPlacesAPI 
+      ref="gPlacesApi"
+      :places="places"
+      :map="map"
+    />
   </template>
 </template>
 
 <script>
+  import GPlacesAPI from './GPlacesAPI.vue'
+
   import { Loader } from '@googlemaps/js-api-loader'
   import { mapSettings } from '@/constants/mapConfig'
   import { mapState, mapActions } from 'vuex'
 
   export default {
     name: 'GMapLoader',
+    components: {
+      GPlacesAPI
+    },
     data: function() {
       return {
         google: null,
         geocoder: null,
+        places: null,
         map: null,
         loader: false
       };
@@ -28,6 +40,16 @@
       initMap() {
         const mapContainer = this.$refs.map;
         this.map = new this.google.maps.Map(mapContainer, mapSettings);
+
+        console.log('Map init');
+
+        this.google.maps.event.addListenerOnce(this.map, 'idle', () => {
+          this.map.addListener('idle', () => {
+            this.$refs.gPlacesApi.addNearbyPlaces();
+          });
+        });
+
+        this.map.addListener('click', this.addRestaurantOnMap);
       },
       setToUserPosition() {
         navigator.geolocation.getCurrentPosition((position) => {
@@ -53,10 +75,7 @@
             lat: e.latLng.lat(),
             lng: e.latLng.lng()
           }
-        }, function(results, status){
-          console.log(results);
-          console.log(status);
-
+        }, (results) => {
           _this.setPositionNewRestaurantInfos({
             address: results[0].formatted_address,
             coords: coords
@@ -64,14 +83,21 @@
           _this.toggleNewRestaurant(true);
         });
       },
-      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setPositionNewRestaurantInfos'])
+      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setPositionNewRestaurantInfos', 'addRestaurant']),
+      ...mapActions('map', ['addMarker'])
     },
     computed: {
-      ...mapState(['googleApiKey'])
+      ...mapState(['googleApiKey']),
+      ...mapState({
+        restaurants: (state) => state.restaurantsList.restaurants
+      })
     },
     async mounted() {
+      console.log('GMapLoader component mounted');
+
       const loader = new Loader({
-        apiKey: this.googleApiKey
+        apiKey: this.googleApiKey,
+        libraries: ["places"]
       });
 
       const api = await loader.load().then(function(){
@@ -80,12 +106,11 @@
 
       this.google = api;
       this.geocoder = new this.google.maps.Geocoder();
-      this.loaded = true;
       this.initMap();
       this.setToUserPosition();
-
-
-      this.map.addListener("click", this.addRestaurantOnMap);
+      this.places = new this.google.maps.places.PlacesService(this.map);
+      console.log('Nearby places call');
+      // this.$refs.gPlacesApi.addNearbyPlaces();
     }
   }
 </script>

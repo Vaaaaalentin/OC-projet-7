@@ -21,6 +21,14 @@ const restaurantsList = {
       });
 
       return id;
+    },
+    getRestaurantFromId(state) {
+      return (id) => {
+        return state.restaurants.find(restaurant => restaurant.id == id);
+      }
+    },
+    getGplacesRestaurants(state) {
+      return state.restaurants.filter(restaurant => restaurant.from === 'gplaces');
     }
   },
   mutations: {
@@ -49,9 +57,24 @@ const restaurantsList = {
     },
     SET_AVERAGE_RATING_RESTAURANTS(state, params) {
       state.restaurants[params.index].averageRating = params.rating;
+    },
+    SET_REVIEWS_LIST_TO_RESTAURANT(state, params) {
+      const index = state.restaurants.findIndex((restaurant) => {
+        return restaurant.id == params.id;
+      });
+
+      if(index == -1)
+        return;
+
+      state.restaurants[index].ratings = params.reviews;
     }
   },
   actions: {
+    setReviewsListToRestaurant(context, params) {
+      context.commit('SET_REVIEWS_LIST_TO_RESTAURANT', params);
+
+      context.dispatch('updateRestaurantAverage', params.id);
+    },
     toggleNewRestaurant(context, setting) {
       context.commit('TOGGLE_NEW_RESTAURANT', setting);
     },
@@ -74,9 +97,13 @@ const restaurantsList = {
         total += element.stars
       });
 
-      const average = total/ratings.length;
+      const average = total/ratings.length || 0;
 
-      context.commit('SET_AVERAGE_RATING_RESTAURANTS', id, average);
+      const index = this.state.restaurantsList.restaurants.findIndex((restaurant) => {
+        return restaurant.id == id;
+      });
+
+      context.commit('SET_AVERAGE_RATING_RESTAURANTS', {index: index, rating: average});
     },
     updateAllRestaurantsAverage(context){
       for(let i=0; i<this.state.restaurantsList.restaurants.length; i++)

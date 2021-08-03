@@ -65,6 +65,9 @@
         restaurants: state => state.restaurantsList.restaurants,
         markers: state => state.map.markers
       })
+    },
+    mounted() {
+      console.log('CustomMap component mounted');
     }
   }
 </script>

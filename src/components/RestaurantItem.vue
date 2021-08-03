@@ -62,6 +62,8 @@
       ...mapState({
         restaurantModal: (state) => state.modal.restaurantModal
       })
+    },
+    mounted () {
     }
   }
 </script>
