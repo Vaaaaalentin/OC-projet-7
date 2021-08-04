@@ -86,9 +86,16 @@
             });
 
           }
+          else if(status== 'OVER_QUERY_LIMIT')
+          {
+            setTimeout(() => {
+              console.log('retry getting place details');
+
+              this.addPlaceReviews(placeId, restaurantId);
+            }, 550);
+          }
           else
             console.log(status);
-
         });
       },
       formateReviews(reviews = []) {
