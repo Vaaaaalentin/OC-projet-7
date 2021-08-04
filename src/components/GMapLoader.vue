@@ -29,6 +29,7 @@
     },
     data: function() {
       return {
+        apiKey: process.env.VUE_APP_GOOGLE_API_KEY,
         google: null,
         geocoder: null,
         places: null,
@@ -96,7 +97,7 @@
       console.log('GMapLoader component mounted');
 
       const loader = new Loader({
-        apiKey: this.googleApiKey,
+        apiKey: this.apiKey,
         libraries: ["places"]
       });
 
@@ -110,7 +111,6 @@
       this.setToUserPosition();
       this.places = new this.google.maps.places.PlacesService(this.map);
       console.log('Nearby places call');
-      // this.$refs.gPlacesApi.addNearbyPlaces();
     }
   }
 </script>
