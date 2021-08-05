@@ -5,7 +5,7 @@ import { map } from './modules/map.js'
 
 export default createStore({
   state: {
-    googleApiKey: 'AIzaSyB60Ffk7jJMPVEeAwu70s__cHmB5Dxr6C8',
+    
   },
   getters: {
     getRestaurantFromId(state) {

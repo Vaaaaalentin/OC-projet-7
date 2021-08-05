@@ -3,23 +3,19 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
-
   export default {
     name: 'GStreetViewImage',
     props: {
       address: String
     },
-    methods: {
-
-    },
-    mounted() {
-      console.log(this.imageURL);
+    data: function() {
+      return {
+        apiKey: process.env.VUE_APP_GOOGLE_API_KEY
+      }
     },
     computed: {
-      ...mapState(['googleApiKey']),
       imageURL() {
-        return 'https://maps.googleapis.com/maps/api/streetview?location='+this.parsedAddress+'&size=300x200&key='+this.googleApiKey;
+        return 'https://maps.googleapis.com/maps/api/streetview?location='+this.parsedAddress+'&size=300x200&key='+this.apiKey;
       },
       parsedAddress() {
         return this.address.split(' ').join('+');
