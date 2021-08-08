@@ -32,6 +32,11 @@ const restaurantsList = {
     }
   },
   mutations: {
+    SET_RESTAURANT_VISIBILITY(state, params) {
+      console.log(params.index);
+
+      state.restaurants[params.index].isVisible = params.visibility;
+    },
     SETUP_RESTAURANTS_LIST(state) {
       state.restaurants = RESTAURANTS_LIST.slice();
     },
@@ -70,6 +75,13 @@ const restaurantsList = {
     }
   },
   actions: {
+    setRestaurantVisibility(context, params) {
+      const index = this.state.restaurantsList.restaurants.findIndex((restaurant) => {
+        return restaurant.id == params.id;
+      });
+
+      context.commit('SET_RESTAURANT_VISIBILITY', {index: index, visibility: params.visibility});
+    },
     setReviewsListToRestaurant(context, params) {
       context.commit('SET_REVIEWS_LIST_TO_RESTAURANT', params);
 
@@ -85,6 +97,8 @@ const restaurantsList = {
       context.commit('RESET_NEW_RESTAURANT_INFOS');
     },
     addRestaurant(context, restaurant) {
+      restaurant.isVisible = true;
+
       context.commit('ADD_RESTAURANT', restaurant);
     },
     replaceRestaurantsList(context, restaurants) {

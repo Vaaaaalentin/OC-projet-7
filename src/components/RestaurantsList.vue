@@ -79,7 +79,7 @@
     },
     computed: {
       sortedRestaurants: function() {
-        return this.restaurants.filter(restaurant => restaurant.averageRating >= this.sortMin && restaurant.averageRating <= this.sortMax);
+        return this.restaurants.filter(restaurant => restaurant.averageRating >= this.sortMin && restaurant.averageRating <= this.sortMax && restaurant.isVisible);
       },
       ...mapState({
         restaurants: state => state.restaurantsList.restaurants,

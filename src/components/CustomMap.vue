@@ -1,5 +1,5 @@
 <template>
-  <GMapLoader @mapInitialized="addInitMarkers" @newMarker="addMarker">
+  <GMapLoader ref="loader" @mapInitialized="addInitMarkers" @sortVisibleRestaurants="sortVisibleRestaurants" @newMarker="addMarker">
     <template v-slot:default="{ google, map }">
       <MapMarker 
       v-for="marker in markers" 
@@ -27,7 +27,6 @@
     },
     data: function() {
       return {
-        
       };
     },
     methods: {
@@ -58,7 +57,26 @@
 
         this.addMarker(restaurantInfos);
       },
-      ...mapActions('map', ['addMarker', 'removeMarker'])
+      sortVisibleRestaurants() {
+        const restaurants = this.restaurants;
+        const mapBounds = this.$refs.loader.map.getBounds();
+
+        restaurants.forEach((restaurant) => {
+          const isInBound = mapBounds.contains({
+            lat: restaurant.lat,
+            lng: restaurant.long
+          });
+          
+          this.setRestaurantVisibility({
+            id: restaurant.id,
+            visibility: isInBound
+          });
+
+          console.log(this.restaurants);
+        });
+      },
+      ...mapActions('map', ['addMarker', 'removeMarker']),
+      ...mapActions('restaurantsList', ['setRestaurantVisibility'])
     },
     computed: {
       ...mapState({
