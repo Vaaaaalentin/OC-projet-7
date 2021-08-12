@@ -48,9 +48,9 @@
     data: function(){
       return {
         order: null,
-        sortMin: 0,
+        sortMin: 1,
         sortMax: 5,
-        sortRange: [0, 1, 2, 3, 4, 5]
+        sortRange: [1, 2, 3, 4, 5]
       }
     },
     methods: {
@@ -79,7 +79,7 @@
     },
     computed: {
       sortedRestaurants: function() {
-        return this.restaurants.filter(restaurant => restaurant.averageRating >= this.sortMin && restaurant.averageRating <= this.sortMax && restaurant.isVisible);
+        return this.restaurants.filter(restaurant => (restaurant.averageRating >= this.sortMin && restaurant.averageRating <= this.sortMax || restaurant.ratings.length == 0) && restaurant.isVisible);
       },
       ...mapState({
         restaurants: state => state.restaurantsList.restaurants,
