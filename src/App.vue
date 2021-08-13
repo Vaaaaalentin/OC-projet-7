@@ -55,4 +55,15 @@
     scrollbar-width: thin;
     scrollbar-color: #2c3e50 #efefef;
   }
+
+  select, input{
+    padding: 5px;
+    font-size: 16px;
+    border-width: 1px;
+    border-color: #CCCCCC;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-style: solid;
+    border-radius: 0px;
+  }
 </style>

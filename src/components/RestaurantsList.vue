@@ -18,6 +18,7 @@
         <select name="max" v-on:change="maxSort($event)">
           <option v-for="i in sortRange" :value="i" :key="i" :selected="(i==sortMax) ? true : false">{{ i }}</option>
         </select>
+        <BIconStarFill />
       </div>
     </div>
     <ul class="c-scrollbar">
@@ -47,7 +48,7 @@
     },
     data: function(){
       return {
-        order: null,
+        order: 'desc',
         sortMin: 1,
         sortMax: 5,
         sortRange: [1, 2, 3, 4, 5]
@@ -94,6 +95,7 @@
   #restaurants-list{
     flex: 0 0 350px;
     background-color: #EAEAEA;
+    border: solid 1px #CCCCCC;
     box-shadow: 1px 10px 10px #2d2d2d;
     z-index: 2;
     max-height: 100vh;
@@ -115,18 +117,27 @@
   }
   #restaurants-list .ctrls .order .btn{
     width: 50%;
+    height: 100%;
     border-radius: 0;
   }
   #restaurants-list .ctrls .order .btn.selected{
     border: none;
+    background-color: #77b55a;
   }
   #restaurants-list .ctrls .order .btn svg{
     width: 1.5em;
     height: 1.5em;
   }
 
+  #restaurants-list .ctrls .sort{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
   #restaurants-list .ctrls .sort select{
     height: 100%;
+    margin: 0 5px;
   }
 
   #restaurants-list > ul{
