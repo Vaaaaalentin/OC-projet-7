@@ -1,16 +1,19 @@
 <template>
-  <GMapLoader ref="loader" @mapInitialized="addInitMarkers" @sortVisibleRestaurants="sortVisibleRestaurants" @newMarker="addMarker">
-    <template v-slot:default="{ google, map }">
-      <MapMarker 
-      v-for="marker in markers" 
-      :key="marker.id" 
-      :name="marker.name"
-      :id="marker.id"
-      :position="marker.position" 
-      :google="google" 
-      :map="map" />
-    </template>
-  </GMapLoader>
+  <div id="map-holder">
+    <Geolocation ref="geolocation"/>
+    <GMapLoader ref="loader" @setToUserPosition="setToUserPosition" @sortVisibleRestaurants="sortVisibleRestaurants" @newMarker="addMarker">
+      <template v-slot:default="{ google, map }">
+        <MapMarker 
+        v-for="marker in markers" 
+        :key="marker.id" 
+        :name="marker.name"
+        :id="marker.id"
+        :position="marker.position" 
+        :google="google" 
+        :map="map" />
+      </template>
+    </GMapLoader>
+  </div>
 </template>
 
 <script>
@@ -18,18 +21,27 @@
 
   import MapMarker from './MapMarker.vue'
   import GMapLoader from './GMapLoader.vue'
+  import Geolocation from './Geolocation.vue'
 
   export default {
     name: 'CustomMap',
     components: {
       MapMarker,
-      GMapLoader
-    },
-    data: function() {
-      return {
-      };
+      GMapLoader,
+      Geolocation
     },
     methods: {
+      setToUserPosition() {
+        this.$refs.geolocation.getUserPosition((position) => {
+          const coords = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          this.$refs.loader.map.setCenter(coords);
+          this.addInitMarkers(coords);
+        });
+      },
       addInitMarkers(userPosition) {
         this.addUserMarker(userPosition);
 
@@ -92,4 +104,9 @@
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
+  #map-holder{
+    width: 100%;
+    display: flex;
+    position: relative;
+  }
 </style>

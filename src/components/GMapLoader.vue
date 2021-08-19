@@ -53,17 +53,6 @@
 
         this.map.addListener('click', this.addRestaurantOnMap);
       },
-      setToUserPosition() {
-        navigator.geolocation.getCurrentPosition((position) => {
-          const coords = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-
-          this.map.setCenter(coords);
-          this.$emit('mapInitialized', coords);
-        });
-      },
       addRestaurantOnMap(e) {
         const coords = {
           lat: e.latLng.lat(),
@@ -109,7 +98,7 @@
       this.google = api;
       this.geocoder = new this.google.maps.Geocoder();
       this.initMap();
-      this.setToUserPosition();
+      this.$emit('setToUserPosition');
       this.places = new this.google.maps.places.PlacesService(this.map);
       console.log('Nearby places call');
     }
