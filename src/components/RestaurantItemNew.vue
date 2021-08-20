@@ -27,10 +27,11 @@
           return;
 
         const restaurant = {
-          restaurantName: this.newRestaurantInfos.name,
+          name: this.newRestaurantInfos.name,
           address: this.newRestaurantInfos.address,
           lat: this.newRestaurantInfos.coords.lat,
-          long: this.newRestaurantInfos.coords.long
+          long: this.newRestaurantInfos.coords.long,
+          id: this.getNextRestaurantId
         };
 
         this.addRestaurant(restaurant);
@@ -41,7 +42,7 @@
             lng: restaurant.long
           },
           id: restaurant.id, 
-          name: restaurant.restaurantName
+          name: restaurant.name
         });
 
         this.toggleNewRestaurant(false);

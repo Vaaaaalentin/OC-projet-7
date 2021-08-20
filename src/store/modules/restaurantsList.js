@@ -106,6 +106,8 @@ const restaurantsList = {
         isVisible: true
       };
 
+      console.log(restaurant);
+
       context.commit('ADD_RESTAURANT', restaurant);
     },
     replaceRestaurantsList(context, restaurants) {
