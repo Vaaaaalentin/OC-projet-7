@@ -30,10 +30,7 @@
           restaurantName: this.newRestaurantInfos.name,
           address: this.newRestaurantInfos.address,
           lat: this.newRestaurantInfos.coords.lat,
-          long: this.newRestaurantInfos.coords.long,
-          id: this.getNextRestaurantId,
-          averageRating: 0,
-          ratings: []
+          long: this.newRestaurantInfos.coords.long
         };
 
         this.addRestaurant(restaurant);

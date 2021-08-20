@@ -15,7 +15,7 @@ const restaurantsList = {
     getNextRestaurantId(state) {
       let id = 1;
 
-      state.restaurants.forEach(function(restaurant){
+      state.restaurants.forEach(restaurant => {
         if(restaurant.id >= id)
           id = id+1;
       });
@@ -33,8 +33,6 @@ const restaurantsList = {
   },
   mutations: {
     SET_RESTAURANT_VISIBILITY(state, params) {
-      console.log(params.index);
-
       state.restaurants[params.index].isVisible = params.visibility;
     },
     SETUP_RESTAURANTS_LIST(state) {
@@ -96,8 +94,17 @@ const restaurantsList = {
     resetNewRestauranInfos(context) {
       context.commit('RESET_NEW_RESTAURANT_INFOS');
     },
-    addRestaurant(context, restaurant) {
-      restaurant.isVisible = true;
+    addRestaurant(context, restaurantInfos) {
+      const restaurant = {
+        id: restaurantInfos.id || context.getters.getNextRestaurantId,
+        restaurantName: restaurantInfos.name,
+        address: restaurantInfos.address,
+        lat: restaurantInfos.lat,
+        long: restaurantInfos.long,
+        averageRating: 0,
+        ratings: [],
+        isVisible: true
+      };
 
       context.commit('ADD_RESTAURANT', restaurant);
     },
@@ -140,6 +147,7 @@ const restaurantsList = {
         const average = total/ratings.length;
 
         context.commit('SET_AVERAGE_RATING_RESTAURANTS', {index: i, rating: average});
+        context.commit('SET_RESTAURANT_VISIBILITY', {index: i, visibility: false});
       }
     }
   }

@@ -74,8 +74,7 @@
           _this.toggleNewRestaurant(true);
         });
       },
-      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setPositionNewRestaurantInfos', 'addRestaurant']),
-      ...mapActions('map', ['addMarker'])
+      ...mapActions('restaurantsList', ['toggleNewRestaurant', 'setPositionNewRestaurantInfos'])
     },
     computed: {
       ...mapState(['googleApiKey']),

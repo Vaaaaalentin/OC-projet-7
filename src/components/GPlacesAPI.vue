@@ -8,19 +8,13 @@
       map: Object
     },
     methods: {
-      updateRestaurantList() {
-
-      },
       addNearbyPlaces() {
         this.places.nearbySearch({
           bounds: this.map.getBounds(),
           types: ['restaurant', 'food', 'establishment', 'point_of_interest']
         }, (results) => {
           let restaurants = this.excludeTypes(results);
-
-          console.log(restaurants);
           restaurants = this.excludeDuplicates(restaurants);
-          console.log(restaurants);
 
           restaurants.forEach((place) => {
             let restaurantInfos = this.formateRestaurantInfos(place);
@@ -28,7 +22,7 @@
             this.addRestaurant(restaurantInfos);
             this.addMarker({
               id: restaurantInfos.id,
-              name: restaurantInfos.restaurantName,
+              name: restaurantInfos.name,
               position: {
                 lat: restaurantInfos.lat,
                 lng: restaurantInfos.long
@@ -59,15 +53,13 @@
       },
       formateRestaurantInfos(place) {
         const restaurantInfos = {
-          restaurantName: place.name,
+          name: place.name,
           address: place.vicinity,
           lat: place.geometry.location.lat(),
           long: place.geometry.location.lng(),
           id: this.getNextRestaurantId,
           from: 'gplaces',
-          gplacesId: place.place_id,
-          averageRating: 0,
-          ratings: []
+          gplacesId: place.place_id
         };
 
         return restaurantInfos;
