@@ -1,5 +1,5 @@
 <script>
-  import { mapActions, mapGetters } from 'vuex'
+  import { mapActions, mapGetters, mapState } from 'vuex'
 
   export default {
     name: 'GPlacesAPI',
@@ -9,10 +9,16 @@
     },
     methods: {
       addNearbyPlaces() {
+        console.log(this.restaurants);
+        console.log(this.getGplacesRestaurants);
+
         this.places.nearbySearch({
           bounds: this.map.getBounds(),
           types: ['restaurant', 'food', 'establishment', 'point_of_interest']
-        }, (results) => {
+        }, (results, e) => {
+          console.log(results);
+          console.log(e);
+
           let restaurants = this.excludeTypes(results);
           restaurants = this.excludeDuplicates(restaurants);
 
@@ -40,7 +46,9 @@
           return !gplacesRestaurants.some(restaurant => restaurant.gplacesId == place.place_id);
         });
       },
-      excludeTypes(places) {
+      excludeTypes(places = []) {
+        console.log(places);
+
         const exclude = ['campground', 'lodging', 'store', 'bakery'];
 
         const filteredPlaces = places.filter((place) => {
@@ -58,7 +66,6 @@
           lat: place.geometry.location.lat(),
           long: place.geometry.location.lng(),
           id: this.getNextRestaurantId,
-          from: 'gplaces',
           gplacesId: place.place_id
         };
 
@@ -106,7 +113,10 @@
       ...mapActions('map', ['addMarker'])
     },
     computed: {
-      ...mapGetters('restaurantsList', ['getNextRestaurantId', 'getRestaurantFromId', 'getGplacesRestaurants'])
+      ...mapGetters('restaurantsList', ['getNextRestaurantId', 'getRestaurantFromId', 'getGplacesRestaurants']),
+      ...mapState({
+        restaurants: state => state.restaurantsList.restaurants
+      })
     },
     mounted() {
       console.log('GPlacesAPI component mounted');

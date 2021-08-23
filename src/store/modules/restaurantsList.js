@@ -28,7 +28,7 @@ const restaurantsList = {
       }
     },
     getGplacesRestaurants(state) {
-      return state.restaurants.filter(restaurant => restaurant.from === 'gplaces');
+      return state.restaurants.filter(restaurant => restaurant.gplacesId != false);
     }
   },
   mutations: {
@@ -101,12 +101,11 @@ const restaurantsList = {
         address: restaurantInfos.address,
         lat: restaurantInfos.lat,
         long: restaurantInfos.long,
+        gplacesId: restaurantInfos.gplacesId || false,
         averageRating: 0,
         ratings: [],
         isVisible: true
       };
-
-      console.log(restaurant);
 
       context.commit('ADD_RESTAURANT', restaurant);
     },
