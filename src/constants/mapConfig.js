@@ -1,5 +1,5 @@
 const mapSettings = {
-  zoom: 14,
+  zoom: 16,
   disableDefaultUI: true,
   styles: [
     {
