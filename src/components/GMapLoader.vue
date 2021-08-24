@@ -46,7 +46,7 @@
 
         this.google.maps.event.addListenerOnce(this.map, 'idle', () => {
           this.map.addListener('idle', () => {
-            this.$refs.gPlacesApi.addNearbyPlaces();
+            this.$refs.gPlacesApi.getNearbyPlaces();
             this.$emit('sortVisibleRestaurants');
           });
         });

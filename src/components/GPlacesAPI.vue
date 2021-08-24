@@ -8,35 +8,46 @@
       map: Object
     },
     methods: {
-      addNearbyPlaces() {
+      getNearbyPlaces() {
         console.log(this.restaurants);
         console.log(this.getGplacesRestaurants);
 
         this.places.nearbySearch({
           bounds: this.map.getBounds(),
           types: ['restaurant', 'food', 'establishment', 'point_of_interest']
-        }, (results, e) => {
+        }, (results, status) => {
           console.log(results);
-          console.log(e);
+          console.log(status);
 
-          let restaurants = this.excludeTypes(results);
-          restaurants = this.excludeDuplicates(restaurants);
+          if(status == 'OK')
+            this.addNearbyPlaces(results);
+          else if(status == 'OVER_QUERY_LIMIT')
+          {
+            setTimeout(() => {
+              console.log('retry getting nearby places');
+              this.getNearbyPlaces();
+            }, 550);
+          }
+        });
+      },
+      addNearbyPlaces(places) {
+        let restaurants = this.excludeTypes(places);
+        restaurants = this.excludeDuplicates(restaurants);
 
-          restaurants.forEach((place) => {
-            let restaurantInfos = this.formateRestaurantInfos(place);
+        restaurants.forEach((place) => {
+          let restaurantInfos = this.formateRestaurantInfos(place);
 
-            this.addRestaurant(restaurantInfos);
-            this.addMarker({
-              id: restaurantInfos.id,
-              name: restaurantInfos.name,
-              position: {
-                lat: restaurantInfos.lat,
-                lng: restaurantInfos.long
-              }
-            });
-
-            this.addPlaceReviews(place.place_id, restaurantInfos.id);
+          this.addRestaurant(restaurantInfos);
+          this.addMarker({
+            id: restaurantInfos.id,
+            name: restaurantInfos.name,
+            position: {
+              lat: restaurantInfos.lat,
+              lng: restaurantInfos.long
+            }
           });
+
+          this.addPlaceReviews(place.place_id, restaurantInfos.id);
         });
       },
       excludeDuplicates(places) {
