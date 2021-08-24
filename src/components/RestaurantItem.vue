@@ -67,6 +67,18 @@
     background-color: #ffffff;
   }
 
+  li>span{
+    margin-bottom: 3px;
+  }
+
+  li .name{
+    font-weight: bold;
+  }
+
+  li .address{
+    font-style: italic;
+  }
+
   li.selected{
     background-color: #77b55a;
     color: #fff;
