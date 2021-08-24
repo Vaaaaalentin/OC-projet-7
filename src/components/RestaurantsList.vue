@@ -28,7 +28,8 @@
       :id="restaurant.id"
       :name="restaurant.restaurantName"
       :address="restaurant.address" 
-      :ratings="restaurant.ratings" />
+      :ratings="restaurant.ratings"
+      :averageRating="restaurant.averageRating" />
 
     </ul>
       <RestaurantItemNew v-if="isAddingNew"/>

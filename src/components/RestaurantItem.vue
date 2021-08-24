@@ -2,13 +2,15 @@
   <li :class="{ selected: isSelected }" v-on:click="showDetails">
     <span class="name">{{ name }}</span>
     <span class="address">{{ address }}</span>
-    <div class="rating">
+    <div class="ratings">
       <div class="rating-average">
         <i v-if="ratings.length==0">Aucun avis</i>
-        <BIconStarFill v-for="n in Math.floor(ratingAverage)" :key="n"/>
-        <BIconStarHalf v-if="ratingHasDecimal" />
-        <BIconStar v-for="n in Math.floor(oppositeRatingAverage)" :key="n"/>
-        <span class="nb-ratings"> ({{ ratings.length }})</span>
+        <div v-if="ratings.length>0">
+          <BIconStarFill v-for="n in Math.floor(averageRating)" :key="n"/>
+          <BIconStarHalf v-if="ratingHasDecimal" />
+          <BIconStar v-for="n in Math.floor(oppositeRatingAverage)" :key="n"/>
+          <span class="nb-ratings"> ({{ ratings.length }})</span>
+        </div>
       </div>
     </div>
   </li>
@@ -23,12 +25,8 @@
       id: Number,
       name: String,
       address: String,
-      ratings: Array
-    },
-    data() {
-      return {
-
-      }
+      ratings: Array,
+      averageRating: Number
     },
     methods: {
       showDetails: function() {
@@ -40,19 +38,11 @@
       ...mapActions('modal', ['toggleModal', 'setInfosModal'])
     },
     computed: {
-      ratingAverage: function() {
-        let total = 0;
-
-        for(let i=0; i<this.ratings.length; i++)
-          total += this.ratings[i].stars;
-
-        return (total/this.ratings.length);
-      },
       oppositeRatingAverage() {
-        return 5 - this.ratingAverage;
+        return 5 - this.averageRating;
       },
       ratingHasDecimal() {
-        return (this.ratingAverage.toString().indexOf('.') != -1) ? true : false;
+        return (this.averageRating.toString().indexOf('.') != -1) ? true : false;
       },
       isSelected() {
         if(this.restaurantModal !== null && this.id === this.restaurantModal.id)
@@ -63,8 +53,6 @@
       ...mapState({
         restaurantModal: (state) => state.modal.restaurantModal
       })
-    },
-    mounted () {
     }
   }
 </script>
@@ -79,9 +67,6 @@
     background-color: #ffffff;
   }
 
-  li .ratings{
-    display: flex;
-  }
   li.selected{
     background-color: #77b55a;
     color: #fff;
