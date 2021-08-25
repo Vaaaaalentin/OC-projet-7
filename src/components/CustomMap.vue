@@ -83,8 +83,6 @@
             id: restaurant.id,
             visibility: isInBound
           });
-
-          console.log(this.restaurants);
         });
       },
       ...mapActions('map', ['addMarker', 'removeMarker']),
@@ -95,9 +93,6 @@
         restaurants: state => state.restaurantsList.restaurants,
         markers: state => state.map.markers
       })
-    },
-    mounted() {
-      console.log('CustomMap component mounted');
     }
   }
 </script>

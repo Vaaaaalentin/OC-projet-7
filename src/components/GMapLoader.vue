@@ -42,8 +42,6 @@
         const mapContainer = this.$refs.map;
         this.map = new this.google.maps.Map(mapContainer, mapSettings);
 
-        console.log('Map init');
-
         this.google.maps.event.addListenerOnce(this.map, 'idle', () => {
           this.map.addListener('idle', () => {
             this.$refs.gPlacesApi.getNearbyPlaces();
@@ -83,8 +81,6 @@
       })
     },
     async mounted() {
-      console.log('GMapLoader component mounted');
-
       const loader = new Loader({
         apiKey: this.apiKey,
         libraries: ["places"]
@@ -99,7 +95,6 @@
       this.initMap();
       this.$emit('setToUserPosition');
       this.places = new this.google.maps.places.PlacesService(this.map);
-      console.log('Nearby places call');
     }
   }
 </script>

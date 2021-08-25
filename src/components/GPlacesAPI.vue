@@ -9,18 +9,12 @@
     },
     methods: {
       getNearbyPlaces() {
-        console.log(this.restaurants);
-        console.log(this.getGplacesRestaurants);
-
         this.toggleLoading(true);
 
         this.places.nearbySearch({
           bounds: this.map.getBounds(),
           types: ['restaurant', 'food', 'establishment', 'point_of_interest']
         }, (results, status) => {
-          console.log(results);
-          console.log(status);
-
           if(status == 'OK')
           {
             this.toggleLoading(false);
@@ -29,7 +23,6 @@
           else if(status == 'OVER_QUERY_LIMIT')
           {
             setTimeout(() => {
-              console.log('retry getting nearby places');
               this.getNearbyPlaces();
             }, 550);
           }
@@ -64,9 +57,7 @@
           return !gplacesRestaurants.some(restaurant => restaurant.gplacesId == place.place_id);
         });
       },
-      excludeTypes(places = []) {
-        console.log(places);
-
+      excludeTypes(places) {
         const exclude = ['campground', 'lodging', 'store', 'bakery'];
 
         const filteredPlaces = places.filter((place) => {
@@ -106,13 +97,9 @@
           else if(status== 'OVER_QUERY_LIMIT')
           {
             setTimeout(() => {
-              console.log('retry getting place details');
-
               this.addPlaceReviews(placeId, restaurantId);
             }, 550);
           }
-          else
-            console.log(status);
         });
       },
       formateReviews(reviews = []) {
@@ -135,9 +122,6 @@
       ...mapState({
         restaurants: state => state.restaurantsList.restaurants
       })
-    },
-    mounted() {
-      console.log('GPlacesAPI component mounted');
     }
   }
 </script>
