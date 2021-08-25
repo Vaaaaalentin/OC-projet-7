@@ -32,7 +32,12 @@
       :averageRating="restaurant.averageRating" />
 
     </ul>
-      <RestaurantItemNew v-if="isAddingNew"/>
+    <div v-if="isLoading" class="loadingIconHolder">
+      <span class="loadingIcon">
+        <BIconArrowClockwise />
+      </span>
+    </div>
+    <RestaurantItemNew v-if="isAddingNew"/>
   </div>
 </template>
 
@@ -85,7 +90,8 @@
       },
       ...mapState({
         restaurants: state => state.restaurantsList.restaurants,
-        isAddingNew: state => state.restaurantsList.isAddingNew
+        isAddingNew: state => state.restaurantsList.isAddingNew,
+        isLoading: state => state.restaurantsList.isLoading
       })
     }
   }
@@ -147,4 +153,39 @@
     padding: 0;
     overflow-y: scroll;
   }
+
+  .loadingIconHolder{
+    text-align: center;
+    padding: 10px 0;
+  }
+
+  .loadingIcon > svg{
+    width: 2em;
+    height: 2em;
+
+    -webkit-animation: loadingIcon 1.5s ease-in-out 0s infinite both;
+    animation: loadingIcon 1.5s ease-in-out 0s infinite both;
+  }
+
+  @-webkit-keyframes loadingIcon {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+    }
+  }
+  @keyframes loadingIcon {
+    0% {
+      -webkit-transform: rotate(0);
+              transform: rotate(0);
+    }
+    100% {
+      -webkit-transform: rotate(360deg);
+              transform: rotate(360deg);
+    }
+  }
+
 </style>

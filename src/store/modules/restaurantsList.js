@@ -5,6 +5,7 @@ const restaurantsList = {
   state: () => ({
     restaurants: [],
     isAddingNew: false,
+    isLoading: false,
     newRestaurantInfos: {
       name: null,
       address: null,
@@ -32,6 +33,9 @@ const restaurantsList = {
     }
   },
   mutations: {
+    TOGGLE_LOADING(state, setting) {
+      state.isLoading = setting;
+    },
     SET_RESTAURANT_VISIBILITY(state, params) {
       state.restaurants[params.index].isVisible = params.visibility;
     },
@@ -73,6 +77,9 @@ const restaurantsList = {
     }
   },
   actions: {
+    toggleLoading(context, setting) {
+      context.commit('TOGGLE_LOADING', setting);
+    },
     setRestaurantVisibility(context, params) {
       const index = this.state.restaurantsList.restaurants.findIndex((restaurant) => {
         return restaurant.id == params.id;

@@ -12,6 +12,8 @@
         console.log(this.restaurants);
         console.log(this.getGplacesRestaurants);
 
+        this.toggleLoading(true);
+
         this.places.nearbySearch({
           bounds: this.map.getBounds(),
           types: ['restaurant', 'food', 'establishment', 'point_of_interest']
@@ -20,7 +22,10 @@
           console.log(status);
 
           if(status == 'OK')
+          {
+            this.toggleLoading(false);
             this.addNearbyPlaces(results);
+          }
           else if(status == 'OVER_QUERY_LIMIT')
           {
             setTimeout(() => {
@@ -28,6 +33,8 @@
               this.getNearbyPlaces();
             }, 550);
           }
+          else
+            this.toggleLoading(false);
         });
       },
       addNearbyPlaces(places) {
@@ -120,7 +127,7 @@
 
         return formattedReviews;
       },
-      ...mapActions('restaurantsList', ['addRestaurant', 'setReviewsListToRestaurant']),
+      ...mapActions('restaurantsList', ['addRestaurant', 'setReviewsListToRestaurant', 'toggleLoading']),
       ...mapActions('map', ['addMarker'])
     },
     computed: {
